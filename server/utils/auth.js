@@ -1,4 +1,5 @@
-//TODO auth.js: Update the auth middleware function to work with the GraphQL API.
+//TODO auth.js: Update the auth middleware function to work with the 
+//GraphQL API.
 
 const jwt = require('jsonwebtoken');
 
