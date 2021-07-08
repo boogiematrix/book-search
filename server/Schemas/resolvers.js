@@ -13,9 +13,9 @@ const resolvers = {
             return User.find();
         },
         // get a single user by either their id or their username
-        user: async (parent, { userId, name }) => {
+        user: async (parent, { userId, username }) => {
             const foundUser = await User.findOne({
-                $or: [{ _id: userId }, { username: name }],
+                $or: [{ _id: userId }, { username: username }],
             });
 
             if (!foundUser) {
@@ -32,20 +32,32 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (parent, { name, email, password }) => {
-            const user = await User.create({ name, email, password });
+        addUser: async (parent, { username, email, password }) => {
+            const user = await User.create({ username, email, password });
             const token = signToken(user);
 
             return { token, user };
         },
-        login: async () => {
+        login: async (parent, {username, email, password}) => {
+            const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
+            if (!user) {
+                throw new AuthenticationError("Can't find this user");
+            }
 
+            const correctPw = await user.isCorrectPassword(password);
+
+            if (!correctPw) {
+                throw new AuthenticationError('Wrong password!' );
+            }
+            const token = signToken(user);
+
+            return {token, user}
         },
         saveBook: async () => {
 
         },
         deleteBook: async () => {
-            
+
         }
     }
 }
