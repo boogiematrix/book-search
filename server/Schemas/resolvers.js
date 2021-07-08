@@ -32,7 +32,21 @@ const resolvers = {
     },
 
     Mutation: {
-        
+        addUser: async (parent, { name, email, password }) => {
+            const user = await User.create({ name, email, password });
+            const token = signToken(user);
+
+            return { token, user };
+        },
+        login: async () => {
+
+        },
+        saveBook: async () => {
+
+        },
+        deleteBook: async () => {
+            
+        }
     }
 }
 
@@ -44,4 +58,4 @@ const resolvers = {
 // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
 // user comes from `req.user` created in the auth middleware function
 
-// remove a book from `savedBooks`
+// remove a book from `savedBooks
