@@ -39,10 +39,18 @@ const resolvers = {
 
             return {token, user}
         },
-        saveBook: async () => {
-
+        saveBook: async (parent, {user, body}, context) => {
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: user._id },
+                    { $addToSet: { savedBooks: body } },
+                    { new: true, runValidators: true }
+                );
+                return updatedUser;
+            }
+            throw new AuthenticationError('Could not save book')
         },
-        deleteBook: async () => {
+        removeBook: async () => {
 
         }
     }
