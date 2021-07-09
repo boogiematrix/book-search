@@ -50,7 +50,7 @@ const resolvers = {
             }
             throw new AuthenticationError('Could not save book')
         },
-        removeBook: async () => {
+        deleteBook: async () => {
 
         }
     }
