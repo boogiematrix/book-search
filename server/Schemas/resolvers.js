@@ -50,8 +50,16 @@ const resolvers = {
             }
             throw new AuthenticationError('Could not save book')
         },
-        deleteBook: async () => {
-
+        deleteBook: async (parent, {user, bookId}, context) => {
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: user._id },
+                    { $pull: { savedBooks: { bookId: bookId } } },
+                    { new: true }
+                );
+                return updatedUser
+            }
+            throw new AuthenticationError('Could not delete book')
         }
     }
 }
