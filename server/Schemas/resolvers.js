@@ -31,7 +31,7 @@ const resolvers = {
         },
         login: async (parent, { username, email, password }) => {
             console.log({username, email, password})
-            const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
+            const user = await User.findOne({ email: email  });
             if (!user) {
                 throw new AuthenticationError("Can't find this user");
             }

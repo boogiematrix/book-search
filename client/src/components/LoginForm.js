@@ -14,7 +14,7 @@ const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [loginUser, {error}] = useMutation(LOGIN_USER)
+  const [loginUser] = useMutation(LOGIN_USER)
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -30,11 +30,12 @@ const LoginForm = () => {
       event.preventDefault();
       event.stopPropagation();
     }
-
+    console.log(userFormData)
     try {
       const { data } = await loginUser({
         variables: userFormData 
       })
+      console.log('form point 37')
 
       //if (!data) {
         //throw new Error('something went wrong!');
