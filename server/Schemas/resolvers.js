@@ -1,14 +1,10 @@
-//TODO resolvers.js: Define the query and mutation functionality 
-//to work with the Mongoose models.
-
-//Hint: Use the functionality in the user - controller.js as a guide.
-
 const { AuthenticationError } = require('apollo-server-express');
-const { User, bookSchema } = require('../models');
+const { User } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
+        //get current users information
         me: async (parent, args, context) => {
             if (context.user) {
                 return User.findOne({ _id: context.user._id }).populate('savedBooks');
@@ -22,6 +18,7 @@ const resolvers = {
     },
 
     Mutation: {
+        //signin function creates token and returns it with user data
         addUser: async (parent, { username, email, password }) => {
             const user = await User.create({ username, email, password });
             
@@ -29,15 +26,14 @@ const resolvers = {
 
             return { token, user };
         },
+        //logs user in, creates and returns token with user data
         login: async (parent, { username, email, password }) => {
-            console.log({username, email, password})
-            const user = await User.findOne({ email: email  });
+            const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
             if (!user) {
                 throw new AuthenticationError("Can't find this user");
             }
 
             const correctPw = await user.isCorrectPassword(password);
-            console.log(correctPw)
             if (!correctPw) {
                 throw new AuthenticationError('Wrong password!' );
             }
@@ -45,6 +41,7 @@ const resolvers = {
 
             return {token, user}
         },
+        //args contains book data, is added to savedBooks in users data
         saveBook: async (parent, args, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
@@ -56,6 +53,7 @@ const resolvers = {
             }
             throw new AuthenticationError('Could not save book')
         },
+        //removes a book's data from savedBooks
         deleteBook: async (parent, { bookId }, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(

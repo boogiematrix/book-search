@@ -1,6 +1,3 @@
-//TODO auth.js: Update the auth middleware function to work with the 
-//GraphQL API.
-
 const jwt = require('jsonwebtoken');
 
 // set token secret and expiration date
@@ -30,7 +27,6 @@ module.exports = {
       console.log('Invalid token');
     }
 
-    // send to next endpoint
     return req
   },
   signToken: function ({ username, email, _id }) {
