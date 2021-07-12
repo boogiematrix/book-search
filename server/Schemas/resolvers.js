@@ -20,6 +20,7 @@ const resolvers = {
     Mutation: {
         addUser: async (parent, { username, email, password }) => {
             const user = await User.create({ username, email, password });
+            
             const token = signToken(user);
 
             return { token, user };
@@ -64,12 +65,4 @@ const resolvers = {
     }
 }
 
-// create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
-
-// login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
-// {body} is destructured req.body
-
-// save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
-// user comes from `req.user` created in the auth middleware function
-
-// remove a book from `savedBooks
+module.exports = resolvers

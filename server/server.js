@@ -3,7 +3,7 @@
 const express = require('express');
 const path = require('path');
 const db = require('./config/connection');
-const routes = require('./routes');
+//const routes = require('./routes');
 const { ApolloServer } = require('apollo-server-express');
 
 const { typeDefs, resolvers } = require('./Schemas');
@@ -19,7 +19,7 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app });
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // if we're in production, serve client/build as static assets
