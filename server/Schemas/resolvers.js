@@ -29,14 +29,15 @@ const resolvers = {
 
             return { token, user };
         },
-        login: async (parent, {username, email, password}) => {
+        login: async (parent, { username, email, password }) => {
+            console.log({username, email, password})
             const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
             if (!user) {
                 throw new AuthenticationError("Can't find this user");
             }
 
             const correctPw = await user.isCorrectPassword(password);
-
+            console.log(correctPw)
             if (!correctPw) {
                 throw new AuthenticationError('Wrong password!' );
             }
@@ -56,14 +57,12 @@ const resolvers = {
             throw new AuthenticationError('Could not save book')
         },
         deleteBook: async (parent, { bookId }, context) => {
-            console.log(bookId)
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
                     { $pull: { savedBooks: { bookId: bookId } } },
                     { new: true }
                 );
-                console.log(updatedUser)
                 return updatedUser
             }
             throw new AuthenticationError('Could not delete book')
