@@ -40,10 +40,10 @@ const resolvers = {
 
             return {token, user}
         },
-        saveBook: async (parent, {user, body}, context) => {
+        saveBook: async (parent, {body, token}, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
-                    { _id: user._id },
+                    { _id: context.user._id },
                     { $addToSet: { savedBooks: body } },
                     { new: true, runValidators: true }
                 );
