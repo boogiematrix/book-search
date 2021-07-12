@@ -1,8 +1,6 @@
-// TODO mutations.js:
-
-// LOGIN_USER will execute the loginUser mutation set up using Apollo Server.
 import { gql } from '@apollo/client';
 
+// LOGIN_USER will execute the loginUser mutation set up using Apollo Server.
 export const LOGIN_USER = gql`
   mutation login ($username: String,$email: String!, $password: String!){
     login(username: $username, email: $email, password: $password){
@@ -46,7 +44,7 @@ export const SAVE_BOOK = gql`
     }
   }
 `;
-// REMOVE_BOOK will execute the removeBook mutation.
+// REMOVE_BOOK will execute the deleteBook mutation.
 export const REMOVE_BOOK = gql`
   mutation deleteBook($bookId: String!) {
     deleteBook(bookId: $bookId) {
