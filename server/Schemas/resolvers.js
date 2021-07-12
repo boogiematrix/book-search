@@ -4,17 +4,21 @@
 //Hint: Use the functionality in the user - controller.js as a guide.
 
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Book } = require('../models');
+const { User, bookSchema } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
         me: async (parent, args, context) => {
             if (context.user) {
-                return Profile.findOne({ _id: context.user._id });
+                return User.findOne({ _id: context.user._id }).populate('savedBooks');
             }
             throw new AuthenticationError('You need to be logged in!');
-        }
+        },
+        users: async () => {
+      return User.find().populate('savedBooks');
+    },
+
     },
 
     Mutation: {
@@ -40,21 +44,23 @@ const resolvers = {
 
             return {token, user}
         },
-        saveBook: async (parent, {body, token}, context) => {
+        saveBook: async (parent, args, context) => {
             if (context.user) {
+                console.log(args)
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: { savedBooks: body } },
+                    { $addToSet: { savedBooks: args } },
                     { new: true, runValidators: true }
                 );
+                console.log(updatedUser)
                 return updatedUser;
             }
             throw new AuthenticationError('Could not save book')
         },
-        deleteBook: async (parent, {user, bookId}, context) => {
+        deleteBook: async (parent, {bookId}, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
-                    { _id: user._id },
+                    { _id: context.user._id },
                     { $pull: { savedBooks: { bookId: bookId } } },
                     { new: true }
                 );
