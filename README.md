@@ -1,7 +1,7 @@
 # Book Search Engine
 
 ## Description
-This is a Google Books API search engine. It was refactored from a fully functioning RESTful API into one built with Apollo Server and using GraphQL. The app was based on the MERN stack  model with a React front end, MongoDB database, and Node.js/Express.js server and API. 
+This is a Google Books API search engine. It was refactored from a fully functioning RESTful API into one built with Apollo Server and GraphQL. The app was based on the MERN stack model with a React front end, MongoDB database, and Node.js/Express.js server and API. In addition to being able to search for books, if signed in, the user can save the books that catch their eye. Later, the user can delete those books once they've been read.
   
   <br/>
 
